@@ -19,7 +19,7 @@ def write_output(sol)
 end
 
 def solve
-  $calories.map{|group| group.sum}.max
+  $calories.map{|group| group.sum}.sort.last(3).sum
 end
 
 read_input
