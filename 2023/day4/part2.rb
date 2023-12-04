@@ -11,7 +11,6 @@ def solve
   $cards.each_with_index.reverse_each do |cs, index|
     matches = cs[0].to_set.intersection(cs[1].to_set).size
     winnings[index] = 1 + (winnings[index+1..index+matches] || []).sum
-    winnings[index]
   end
   winnings.sum
 end
