@@ -2,16 +2,6 @@ require 'set'
 $directions = nil
 $graph = nil
 
-def card_value(c)
-  if c.between?('2', '9') then c.ord - '0'.ord
-  elsif c == 'T' then 10
-  elsif c == 'J' then 11
-  elsif c == 'Q' then 12
-  elsif c == 'K' then 13
-  elsif c == 'A' then 14
-  else raise('wtf') end
-end
-
 def read_input
   f = File.open('input.txt', 'r')
   $directions = f.readline.strip
