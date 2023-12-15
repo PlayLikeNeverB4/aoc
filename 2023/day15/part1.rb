@@ -1,1 +1,1 @@
-p File.open('in.txt').read.strip.split(',').sum{|s| s.chars.reduce(0) {|sum, c| (sum + c.ord) * 17 % 256 }}
+p IO.read('in.txt')[..-2].split(',').sum{|t| t.bytes.reduce(0) {|s, c| (s + c) * 17 % 256 }}
