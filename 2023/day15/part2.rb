@@ -1,44 +1,15 @@
-$steps = nil
-
-def read_input
-  f = File.open('in.txt', 'r')
-  $steps = f.readline.strip.split(',').map do |step|
-    tokens = step.split(/[=-]/)
-    tokens[0] = tokens[0].chars
-    tokens[1] = tokens[1].to_i if tokens.size > 1
-    tokens
-  end
+boxes = {}
+IO.read('in.txt')[..-2].split(',').map do |step|
+  label, val = step.split(/[=-]/)
+  idx = label.bytes.reduce(0) {|s, c| (s + c) * 17 % 256 }
+  box = boxes[idx] ||= {}
+  box[label] = [
+    box.dig(label, 1) && box.dig(label, 0) || ((box.values.map(&:first).max || 0) + 1),
+    val
+  ]
 end
-
-def hash(str)
-  str.reduce(0) {|sum, c| (sum + c.ord) * 17 % 256 }
-end
-
-def solve
-  boxes = {}
-  $steps.each do |label, value|
-    idx = hash(label)
-    boxes[idx] ||= {}
-    if value.nil?
-      boxes[idx].delete(label)
-    else
-      boxes[idx][label] = [
-        boxes[idx].dig(label, 0) || ((boxes[idx].map{|_, data| data.first}.max || 0) + 1),
-        value
-      ]
-    end
+p (boxes.sum do |box_idx, box|
+  box.values.sort.map(&:last).compact.each_with_index.sum do |val, lens_idx|
+    (box_idx + 1) * (lens_idx + 1) * val.to_i
   end
-  boxes.sum do |box_idx, box|
-    box.sort_by(&:last).each_with_index.sum do |entry, lens_idx|
-      label = entry[0]
-      value = entry[1][1]
-      (box_idx + 1) * (lens_idx + 1) * value
-    end
-  end
-end
-
-read_input
-
-solution = solve
-
-puts solution
+end)
